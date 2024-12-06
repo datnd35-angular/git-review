@@ -22,10 +22,10 @@
 ***3. Xóa toàn bộ thay đổi trong working directory và staging area:***
 - ```git reset --hard HEAD~2```
 - Xoá sạch dự liệu của những commit sau HEAD~2
-- Chú ý khi dùng lệnh này
+- ***Chú ý*** lệnh này có thể làm mất dữ liệu 
 
 ## Git stash
-- Dùng để tạm thời lưu trữ (stash) các thay đổi trong working directory và/hoặc staging area mà chưa được commit. Lệnh này giúp bạn chuyển sang một công việc khác mà không cần phải commit các thay đổi dang dở.
+- Dùng để ***tạm thời lưu trữ (stash) các thay đổi trong working directory và/hoặc staging area mà chưa được commit.*** Lệnh này giúp bạn chuyển sang một công việc khác mà không cần phải commit các thay đổi dang dở.
 - Ví dụ: Khi bạn đang làm trên nhánh A có 1 số fields đã thay đổi nhưng bạn vẫn chưa muốn commit và bạn muốn tạo một nhánh mới B từ nhánh A không chứa những thay đổi mới (nhánh B sẽ tạo mới bắt đầu từ commit cuối cùng của nhánh A) để làm được như vậy thì nhánh A phải back về commit cuối cùng và những thay đổi mới sẽ phải xoá sạch,  Git stash có thể giải quyết bằng cách back về commit cũ nhất của A, và lưu các thay đổi vào đâu đó, sẽ hồi lại khi cần.
 
 ***1. Lưu***
@@ -93,6 +93,65 @@ Mô tả hành động (reset, checkout, commit): Cho biết loại thay đổi 
 - ***Lỡ xóa commit hoặc bạn chạy git reset --hard và mất các commit***
   - Chạy ```git reflog``` để xem commit cuối cùng.
   - Tìm commit cuối cùng trước khi reset và khôi phục: ```git reset --hard <commit-hash>``` (***bạn nên tìm theo nội dung của commit***)
+
+## Git cherry-pick
+- Dùng để ***sao chép một commit cụ thể từ một nhánh hoặc lịch sử và áp dụng nó vào nhánh hiện tại.*** Lệnh này cực kỳ hữu ích khi bạn muốn trích xuất một hoặc nhiều commit từ nơi khác mà không cần merge toàn bộ lịch sử.
+
+***Cách sử dụng cơ bản***
+- Cú pháp ```git cherry-pick <commit-hash>```
+
+- ***ví dụ***
+  - Giả sử bạn có nhánh feature với lịch sử:
+    ```
+    A - B - C (main)
+     \
+      D - E (feature)
+    ```
+  - Bạn muốn lấy commit E từ nhánh feature và áp dụng vào nhánh main.
+    ```
+    Chuyển sang main
+    git checkout main
+
+    Chạy lệnh cherry-pick:
+    git cherry-pick <hash-của-E>
+    ```
+  - Sau lệnh, lịch sử của main sẽ trở thành:
+    ```
+    A - B - C - E (main)
+     \
+      D - E (feature)
+    ```
+## Squash commit
+-  ***Quá trình kết hợp nhiều commit thành một commit duy nhất trước khi mợt nhánh*** trong trường hợp muốn dọn dẹp commit không cần thiết hay là commit rác.
+
+***Cách thực hiện squash commit:***
+- Bắt đầu interactive rebase: ```git rebase -i HEAD~N```
+  - N là số commit gần đây bạn muốn squash. Ví dụ, nếu muốn squash 3 commit cuối, bạn thay N bằng 3.
+ 
+- Màn hình chỉnh sửa sẽ xuất hiện:
+  ```
+  pick abc123 First commit
+  pick def456 Second commit
+  pick ghi789 Third commit
+  ```
+- Thay đổi ```pick``` thành ```squash``` (hoặc viết tắt là s):
+  ```
+  pick abc123 First commit
+  squash def456 Second commit
+  squash ghi789 Third commit
+  ```
+- Lưu file và thoát
+- Hoàn tất rebase
+
+## Rebase commit
+- Hiện tại bạn đang đứng ở nhánh A và muốn đồng bộ code vào nhánh ```develop``` tránh trường hợp gây lộn xộn khi push code lên vì thứ tự code được sắp xếp theo lịch sử. Bạn có thể dùng ***Rebase commit*** push tất cả commit trên nhánh A vào đầu của nhánh ```develop```. Giúp code gọn gàng hơn.
+
+
+
+
+
+
+
 
 
 
