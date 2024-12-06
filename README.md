@@ -1,83 +1,50 @@
-# GitDemo
-
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
-
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
-
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-standalone-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
-
-## Finish your CI setup
-
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/gPJrc4nBNb)
+# Git Review
 
 
-## Run tasks
+## Staging area & Working directory
+***Staging area (Index):***
+- Là khu vực trung gian nơi bạn đưa các thay đổi vào bằng cách dùng lệnh git add.
+- Các file trong staging area sẽ được đưa vào commit tiếp theo.
 
-To run the dev server for your app, use:
+***Working directory:***
+- Là nơi chứa các file mà bạn đang làm việc trực tiếp trên máy tính.
+- Bất kỳ thay đổi nào chưa được thêm vào staging area vẫn nằm ở đây.
 
-```sh
-npx nx serve git-demo
+## Git reset
+***1. Quay lại commit trước đó nhưng giữ tất cả thay đổi:***
+- ```git reset --soft HEAD~1``` HEAD~1 là id của commit
+- Giữ nguyên các thay đổi trong staging area, bạn có thể ko cần gõ lệnh git add . lần nữa và commit này sẽ là commit chung cho tất cả những commit sau HEAD~1 và nếu file của bạn hiện tại đang có thay đổi thì nó sẽ là 1 commit khác.
+  
+***2. Hủy bỏ staging file mà không làm mất thay đổi trong working directory:***
+- ```git reset --mixed HEAD```
+- Di chuyển HEAD và xóa các thay đổi trong staging area, đồng nghĩa với vệc bạn phải gõ lại lệnh git add . để đưa những thay đổi mới cũng như những thay đổi của những commit sau HEAD vào staging sau đó nhập lệnh git commit -m "" để tạo lại 1 commit mới.
+
+***3. Xóa toàn bộ thay đổi trong working directory và staging area:***
+- ```git reset --hard HEAD~2```
+- Xoá sạch dự liệu của những commit sau HEAD~2
+- Chú ý khi dùng lệnh này
+
+## Git stash
+- Dùng để tạm thời lưu trữ (stash) các thay đổi trong working directory và/hoặc staging area mà chưa được commit. Lệnh này giúp bạn chuyển sang một công việc khác mà không cần phải commit các thay đổi dang dở.
+- Ví dụ: Khi bạn đang làm trên nhánh A có 1 số fields đã thay đổi nhưng bạn vẫn chưa muốn commit và bạn muốn tạo một nhánh mới B từ nhánh A không chứa những thay đổi mới (nhánh B sẽ tạo mới bắt đầu từ commit cuối cùng của nhánh A) để làm được như vậy thì nhánh A phải back về commit cuối cùng và những thay đổi mới sẽ phải xoá sạch,  Git stash có thể giải quyết bằng cách back về commit cũ nhất của A, và lưu các thay đổi vào đâu đó, sẽ hồi lại khi cần.
+***1. Lưu***
+- ```git stash save "Mô tả chi tiết"``` lưu thay đổi với mô tả or ```git stash ``` lưu thay đổi ko mô tả
+
+***2. Xem danh sách tash***
+- ```git stash list``` Xem danh sách stash.
+```
+    stash@{0}: WIP on main: 123abc Commit message
+    stash@{1}: WIP on feature: 456def Another message
 ```
 
-To create a production bundle:
+***3. Khôi phục***
+- ```git stash pop``` Khôi phục và xóa khỏi stash.
+- ```git stash pop``` khôi phục từ stash mới nhất (trong trường hợp bạn tạo nhiều stash) và phải commit stash hiện tại mới pop được stash cũ hơn. 
+- ```git stash pop stash@{X}``` khi muốn khôi phục một stash chỉ định nào đó.
 
-```sh
-npx nx build git-demo
-```
-
-To see all available targets to run for a project, run:
-
-```sh
-npx nx show project git-demo
-```
-
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/angular:app demo
-```
-
-To generate a new library, use:
-
-```sh
-npx nx g @nx/angular:lib mylib
-```
-
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-standalone-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-# git-review-
+- ```git stash apply``` Khôi phục và giữ lại trong stash.
+  
+***4. Xoá***
+- ```git stash drop stash@{0}```  Xóa một stash cụ thể.
+- ```git stash clear``` Xóa tất cả stash.
+  
